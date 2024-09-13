@@ -58,13 +58,17 @@ const userSchema = new mongoose_1.Schema({
         enum: ["user", "dev", "admin"],
         default: "user",
     },
-}, { timestamps: true });
+}, {
+    timestamps: true,
+});
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = this;
+        //TODOS Delete this or change it
         // if (user.isModified("password")) return next();
         try {
             const salt = yield bcrypt_1.default.genSalt();
+            //TODOS Delete this or change it
             // const salt = 10;
             user.password = yield bcrypt_1.default.hash(user.password, salt);
             next();
@@ -84,5 +88,5 @@ userSchema.methods.comparePassword = function (password) {
         return bcrypt_1.default.compare(password, this.password);
     });
 };
-const UserModel = mongoose_1.default.models.UserModel || mongoose_1.default.model("UserModel", userSchema);
+const UserModel = mongoose_1.default.models.UserModel || mongoose_1.default.model("User", userSchema);
 exports.default = UserModel;

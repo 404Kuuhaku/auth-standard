@@ -3,7 +3,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/user/User";
-import IUser from "../models/user/interface";
 
 interface UserPayload {
 	userId: string;
@@ -31,9 +30,7 @@ const authenticate = async (
 			return res.status(404).json({ message: "User not found" });
 		}
 
-		// req.user = user;
-		// TODOS Create a Custom Type Definition , and Delete this line below and use line above
-		(req as Request & { user?: IUser }).user = user;
+		req.user = user;
 		next();
 	} catch (error) {
 		res.status(401).json({ message: "Invalid token" });

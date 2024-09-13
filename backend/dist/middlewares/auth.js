@@ -31,8 +31,6 @@ const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        // req.user = user;
-        // TODOS Create a Custom Type Definition , and Delete this line below and use line above
         req.user = user;
         next();
     }

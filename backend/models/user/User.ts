@@ -27,14 +27,18 @@ const userSchema = new Schema<ToSchema<IUser>>(
 			default: "user",
 		},
 	},
-	{ timestamps: true }
+	{
+		timestamps: true,
+	}
 );
 
 userSchema.pre("save", async function (next) {
 	const user = this;
+	//TODOS Delete this or change it
 	// if (user.isModified("password")) return next();
 	try {
 		const salt = await bcrypt.genSalt();
+		//TODOS Delete this or change it
 		// const salt = 10;
 		user.password = await bcrypt.hash(user.password, salt);
 		next();
@@ -56,5 +60,5 @@ userSchema.methods.comparePassword = async function (password: string) {
 };
 
 const UserModel =
-	mongoose.models.UserModel || mongoose.model("UserModel", userSchema);
+	mongoose.models.UserModel || mongoose.model("User", userSchema);
 export default UserModel;

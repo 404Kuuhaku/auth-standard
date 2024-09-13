@@ -18,6 +18,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 		if (oldUser) {
 			return res.status(409).send("User Already Exist. Please Login");
 		}
+		//TODOS Delete this or change it
 		// const salt = 10;
 		// const hashedPassword = await bcrypt.hash(password, salt);
 		// const user = new UserModel({
