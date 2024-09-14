@@ -47,10 +47,33 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.register = register;
+// const login = async (req: Request, res: Response, next: NextFunction) => {
+// 	const { username, password } = req.body;
+// 	try {
+// 		const user = await UserModel.findOne({ username });
+// 		if (!user) {
+// 			return res.status(404).json({ message: "User not found" });
+// 		}
+// 		const passwordMatch = await user.comparePassword(password);
+// 		if (!passwordMatch) {
+// 			return res.status(401).json({ message: "Incorrect password" });
+// 		}
+// 		const secretKey = process.env.SECRET_KEY;
+// 		if (!secretKey) {
+// 			throw new Error("SECRET_KEY environment variable is not defined");
+// 		}
+// 		const token = jwt.sign({ userId: user._id }, secretKey, {
+// 			expiresIn: "1 hour",
+// 		});
+// 		res.json({ token });
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// };
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const user = yield User_1.default.findOne({ username });
+        const user = yield User_1.default.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -65,7 +88,16 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, secretKey, {
             expiresIn: "1 hour",
         });
-        res.json({ token });
+        res.cookie("token", token, {
+            maxAge: 300000,
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
+        });
+        // res.json({ token });
+        res.json({
+            message: "login success",
+        });
     }
     catch (error) {
         next(error);

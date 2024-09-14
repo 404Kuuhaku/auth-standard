@@ -16,17 +16,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/user/User"));
 const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
-    if (!token) {
+    // const token = req.headers.authorization?.split(" ")[1];
+    // if (!token) {
+    // 	return res.status(401).json({ message: "Authentication required" });
+    // }
+    const authToken = req.cookies.token;
+    if (!authToken) {
         return res.status(401).json({ message: "Authentication required" });
     }
     try {
+        // const secretKey = process.env.SECRET_KEY;
+        // if (!secretKey) {
+        // 	throw new Error("SECRET_KEY environment variable is not defined");
+        // }
+        // const decodedToken = jwt.verify(token, secretKey) as UserPayload;
+        // const user = await UserModel.findById(decodedToken.userId);
+        // if (!user) {
+        // 	return res.status(404).json({ message: "User not found" });
+        // }
+        // req.user = user;
+        // next();
         const secretKey = process.env.SECRET_KEY;
         if (!secretKey) {
             throw new Error("SECRET_KEY environment variable is not defined");
         }
-        const decodedToken = jsonwebtoken_1.default.verify(token, secretKey);
+        const decodedToken = jsonwebtoken_1.default.verify(authToken, secretKey);
         const user = yield User_1.default.findById(decodedToken.userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
